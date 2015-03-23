@@ -1,0 +1,245 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Elecciones presidenciales 2013 en la prensa</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+            body {
+                padding-bottom: 20px;
+            }
+        </style>
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    <!--<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+        </div><!--/.navbar-collapse --
+      </div>
+    </nav>-->
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="container">
+    <h1>Elecciones presidenciales chilenas 2013</h1>
+        <h2>Cobertura de prensa</h2>
+    </div>    
+    <div class="jumbotron">
+      <div class="container">
+        <div id="chart">
+        </div>
+        <div id ="leyenda">
+            <div class="lista-leyenda">
+                <span class="leyenda-emol"></span>EMOL
+                <span class="leyenda-LT"></span>La Tercera
+                <span class="leyenda-LN"></span>La Naci&oacute;n
+                <span class="leyenda-EM"></span>El Mostrador
+            </div>
+            
+        </div>  
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          
+        </div>
+        <div id="articulo" class="col-md-6">
+            <article>
+                <h4></h4>
+                <h3></h3>
+                <p></p>
+            </article>
+       </div>
+        <div class="col-md-3">
+          
+        </div>
+      </div>
+
+      <hr>
+
+      <footer>
+        <p>&copy; Diego Ávila - 2015</p>
+      </footer>
+    </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+
+        <script src="js/main.js"></script>
+        <script type="text/javascript">
+          var data;
+        
+        var generarGrafico = function (data){
+            
+            var margin = {top: 20, right: 15, bottom: 60, left: 60}
+          , width = 960 - margin.left - margin.right
+          , height = 500 - margin.top - margin.bottom;
+
+            var tooltip = d3.select("body")
+                            .append("div")
+                            .style("position", "absolute")
+                            .style("z-index", "10")
+                            .style("visibility", "hidden")
+                            .attr("id", "tooltip");
+
+            var minX = d3.min(data, function(d) { return d.x; });
+            var maxX = d3.max(data, function(d) { return d.x; });
+
+            var minY = d3.min(data, function(d) { return d.y; });
+            var maxY = d3.max(data, function(d) { return d.y; })    
+
+            var x = d3.scale.linear()
+                  .domain([minX - maxX*0.1,maxX+maxX*0.1])
+                  .range([ 0, width ]);
+
+            var y = d3.scale.linear()
+                      .domain([minY-maxY*0.1, maxY+maxY*0.1])
+                      .range([ height, 0 ]);
+
+            var chart = d3.select("#chart")
+                            .append('svg:svg')
+                            .attr('width', width + margin.right + margin.left)
+                            .attr('height', height + margin.top + margin.bottom)
+                            .attr('class', 'chart');
+            var main = chart.append('g')
+                        .attr('transform', 
+                              'translate(' + margin.left + ',' + margin.top + ')')
+                        .attr('width', width)
+                        .attr('height', height)
+                        .attr('class', 'main');
+
+             // draw the x axis
+            var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient('bottom');
+
+            main.append('g')
+            .attr('transform', 'translate(0,' + height + ')')
+            .attr('class', 'main axis date')
+            .call(xAxis);
+
+            // draw the y axis
+            var yAxis = d3.svg.axis()
+            .scale(y)
+            .orient('left');
+
+            main.append('g')
+            .attr('transform', 'translate(0,0)')
+            .attr('class', 'main axis date')
+            .call(yAxis);
+
+            var g = main.append("svg:g"); 
+
+            var circles = g.selectAll("circle")
+                                        .data(data)
+                                        .enter()
+                                        .append("circle");
+            var circlesAtt = circles
+                            .attr("cx", function (d){return x(d.x);})
+                            .attr("cy", function (d){return y(d.y);})
+                            .attr("r", 5)
+                            .style("fill", function(d){
+                                    var color;
+                                    if(d.medio == 'EMOL'){color= "blue" ;}
+                                    else if(d.medio == 'La Tercera'){color= "red";}
+                                    else if(d.medio == 'La Nacion'){color= "orange";}
+                                    else{color= "green"}
+                                    return color;
+                                    })
+                            .style("opacity", 0.3)
+                            .on("click", function(d){
+                                console.log(d.titulo);
+                                location.href="#articulo"
+                                d3.select("article").style("visibility", "visible");
+                                d3.select("#articulo article h4").text(d.medio);
+                                d3.select("#articulo article h3").text(d.titulo);
+                                d3.select("#articulo article p").html('<em>'+
+                                                                      d.fecha+
+                                                                     '</em>'+
+                                                                     '<br>'+
+                                                                     '<a href="'+d.url+'" target="_blank">'+
+                                                                     d.url+
+                                                                     '</a>');
+                            })
+                            .on("mouseover", function(d){
+                                d3.select(this)
+                                .transition()
+                                .delay(0)
+                                .duration(500)
+                                .attr("r", 15)
+                                .style("opacity", 1);
+
+                                return tooltip
+                                        .style("visibility", "visible")
+                                        //.text(d.fecha+"<br>"+d.titulo + "(" +d.x +","+d.y + ")")
+                                        .html('<div>'+
+                                                '<h5>'+d.medio+'</h5>'+
+                                              '</div>'+
+                                                '<div>'+
+                                                '<strong>'+d.fecha+'</strong>'+
+                                              '</div>'+
+                                              '<div>'+
+                                                d.titulo+
+                                              '</div>'
+                                             )
+                                ;
+                            })
+                            .on("mousemove", function(){
+                                return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+                            .on("mouseout", function(){
+                                d3.select(this)
+                                .transition()
+                                .delay(0)
+                                .duration(500)
+                                .attr("r", 5)
+                                .style("opacity", 0.3);
+                                return tooltip.style("visibility", "hidden");
+                            });
+                            ;
+
+        };
+        
+        d3.json("data/data-full.json", function(error, json){
+            if (error) {return console.warn(error);}
+            data = json;
+            generarGrafico(data);
+        } );
+        
+        </script>
+    </body>
+</html>

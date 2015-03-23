@@ -1,0 +1,87 @@
+
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+body{
+background: url(../img/concrete_seamless.png);
+      font-family: "Lato", Calibri, Arial, sans-serif;
+    color:#666;
+}
+
+#tooltip{
+            background: rgb(250, 250, 250);
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: 0px 0px 20px grey;
+        }
+        .chart {
+
+        }
+
+        .main text {
+            font: 10px sans-serif;	
+        }
+
+        .axis line, .axis path {
+            shape-rendering: crispEdges;
+            stroke: black;
+            fill: none;
+        }
+        
+        #chart svg{
+            background: #F2F2F2;
+        }  
+
+        container h1 {
+            font-size: 30px;
+            line-height: 38px;
+            margin: 0;
+            position: relative;
+            font-weight: 300;
+            color: #666;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+        }
+        .jumbotron{
+          background: rgba(0,0,0,0.2);
+        }
+        article{
+            background: rgba(255,255,255, 0.5);
+            padding: 20px;
+            visibility: hidden;
+        }
+    h1, h2 {  text-align: center;}
+article h4{  border-bottom: #666 solid 2px;}
+        #leyenda{
+            position: relative;
+            top: -45px;
+        }
+        #leyenda span {
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          border-radius: 10px;
+          margin-right: 10px;
+          margin-left: 20px;    
+          position: relative;
+          top: 5px;
+        }
+        .lista-leyenda{
+            display: inline-block;
+            margin-left: 255px;
+            margin-right: auto;
+        }
+        .leyenda-emol{background: blue;}
+        .leyenda-LT{background: red;}
+        .leyenda-LN{background: orange;}
+        .leyenda-EM{background: green;}
+
+
+
+
+
+
+
+
+
