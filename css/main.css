@@ -66,18 +66,71 @@ article h4{  border-bottom: #666 solid 2px;}
           margin-left: 20px;    
           position: relative;
           top: 5px;
+          border:solid 2px;
         }
         .lista-leyenda{
             display: inline-block;
             margin-left: 255px;
             margin-right: auto;
         }
-        .leyenda-emol{background: blue;}
-        .leyenda-LT{background: red;}
-        .leyenda-LN{background: orange;}
-        .leyenda-EM{background: green;}
+        .leyenda-emol{background: blue; border-color: blue;}
+        .leyenda-LT{background: red; border-color: red;}
+        .leyenda-LN{background: orange; border-color: orange;}
+        .leyenda-EM{background: green; border-color:green;}
+        ul{list-style: none;}
+        ul li {float: left;}
+        ul li:hover{font-weight: bold; cursor: pointer;}
+        .no-background{background: none;}
 
+.spinner {
+  margin: 100px auto;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  text-align: center;
+  
+  -webkit-animation: rotate 2.0s infinite linear;
+  animation: rotate 2.0s infinite linear;
+}
 
+.dot1, .dot2 {
+  width: 60%;
+  height: 60%;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  background-color: #333;
+  border-radius: 100%;
+  
+  -webkit-animation: bounce 2.0s infinite ease-in-out;
+  animation: bounce 2.0s infinite ease-in-out;
+}
+
+.dot2 {
+  top: auto;
+  bottom: 0px;
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@-webkit-keyframes rotate { 100% { -webkit-transform: rotate(360deg) }}
+@keyframes rotate { 100% { transform: rotate(360deg); -webkit-transform: rotate(360deg) }}
+
+@-webkit-keyframes bounce {
+  0%, 100% { -webkit-transform: scale(0.0) }
+  50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes bounce {
+  0%, 100% { 
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 50% { 
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+.active{color: white;}
 
 
 

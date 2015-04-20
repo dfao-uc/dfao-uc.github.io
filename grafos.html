@@ -1,0 +1,210 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang=""> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang=""> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Elecciones presidenciales 2013 en la prensa</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <style>
+
+        .node {
+          stroke: #fff;
+          stroke-width: 1.5px;
+        }
+
+        .link {
+          stroke: #999;
+          stroke-opacity: .6;
+        }
+
+        </style>
+ 
+        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/main.css">
+
+        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <nav class="active navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">
+              Elecciones presidenciales chilenas 2013</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <!--<form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>-->
+            <div class="navbar-form navbar-right">
+                <div class="form-group">
+                    <a class="btn btn-link"  href="index.html">
+                        Documentos
+                    </a>
+                </div>
+                <div class="form-group">
+                    <a class="btn btn-link "  href="grafos.html">
+                        <strong>T&eacute;rminos</strong>
+                    </a>
+                </div>
+                
+            
+            </div>
+            
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+        <div class="container">
+        
+    </div>  
+        <div class="container">
+        <h3>Campos sem&aacute;nticos</h3>
+        <ul id="nav-menu" class="nav nav-pills">
+          <li id="btn-emol" role="presentation" class="active"><a href="#graph">EMOL</a></li>
+          <li id="btn-lt" role="presentation"><a href="#graph">La Tercera</a></li>
+          <li id="btn-ln" role="presentation"><a href="#graph">La Nacion</a></li>
+          <li id="btn-em" role="presentation"><a href="#graph">El Mostrador</a></li>
+        </ul>
+        <div id="#graph"></div>
+        </div>
+</body>
+ <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+        <script src="js/vendor/bootstrap.min.js"></script>
+<script>
+    
+
+var generateGraph= function(){
+    d3.select("svg").remove();
+    var width = 960,
+    height = 500;
+
+    var color = d3.scale.category20();
+
+    var force = d3.layout.force()
+        .charge(-120)
+        .linkDistance(30)
+        .size([width, height]);
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    d3.json(data, function(error, graph) {
+      force
+          .nodes(graph.nodes)
+          .links(graph.links)
+          .start();
+
+      var link = svg.selectAll(".link")
+          .data(graph.links)
+        .enter().append("line")
+          .attr("class", "link")
+          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+    /*
+      var node = svg.selectAll(".node")
+          .data(graph.nodes)
+        .enter().append("circle")
+          .attr("class", "node")
+          .attr("r", 5)
+          .style("fill", function(d) { return color(d.group); })
+          .call(force.drag);*/
+
+     var gnodes = svg.selectAll('g.gnode')
+     .data(graph.nodes)
+     .enter()
+     .append('g')
+     .classed('gnode', true)
+     .call(force.drag)
+     .style('cursor', 'pointer');
+
+     var node = gnodes.append('circle')
+     .attr('class', 'node')
+     .attr('r', 4)
+     .style("fill", function(d) { return color(d.group); })
+     ;
+
+    // Append the labels to each group
+    var labels = gnodes.append("text")
+      .text(function(d) { return d.term; });    
+
+      //node.append("title")
+    //      .text(function(d) { return d.termn; });
+
+      force.on("tick", function() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
+
+        //node.attr("cx", function(d) { return d.x; })
+        //    .attr("cy", function(d) { return d.y; });
+
+          // Translate the groups
+      gnodes.attr("transform", function(d) { 
+        return 'translate(' + [d.x, d.y] + ')'; 
+      });  
+      });
+    });
+
+
+};
+var data = "data/emol-full-grafo.json";
+$('document').ready(function(){
+    generateGraph(data);
+    
+    $('#btn-emol').click(function(){
+        resetBtn();
+        $(this).addClass('active');
+        data = 'data/emol-full-grafo.json';
+        generateGraph(data);
+    });
+    
+    $('#btn-lt').click(function(){
+        resetBtn();
+        $(this).addClass('active');
+        data = 'data/la_tercera-full-grafo.json';
+        generateGraph(data);
+    });
+    
+    $('#btn-ln').click(function(){
+        resetBtn();
+        $(this).addClass('active');
+        data = 'data/la_nacion-full-grafo.json';
+        generateGraph(data);
+    });
+    
+    $('#btn-em').click(function(){
+        resetBtn();
+        $(this).addClass('active');
+        data = 'data/el_mostrador-full-grafo.json';
+        generateGraph(data);
+    });
+    
+    var resetBtn = function(){
+        $('#nav-menu li').removeClass('active');
+    }
+});    
+
+</script>
+</html>
